@@ -6,10 +6,13 @@ A RAG (Retrieval-Augmented Generation) powered chatbot that enables natural lang
 
 ## Screenshots
 
+### Home Screen
 ![Home Screen](screenshots/Screenshot_1.png)
 
+### Resume Upload
 ![Resume Upload](screenshots/Screenshot_2.png)
 
+### AI Response Example
 ![AI Response Example](screenshots/Screenshot_2.png)
 
 ## 🎯 Overview
