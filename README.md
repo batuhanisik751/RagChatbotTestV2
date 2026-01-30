@@ -4,6 +4,14 @@ A RAG (Retrieval-Augmented Generation) powered chatbot that enables natural lang
 
 ---
 
+## Screenshots
+
+![Home Screen](screenshots/Screenshot_1.png)
+
+![Resume Upload](screenshots/Screenshot_2.png)
+
+![AI Response Example](screenshots/Screenshot_2.png)
+
 ## 🎯 Overview
 
 Document Coach is an AI-powered document analysis system designed for hiring workflows and document review. Upload PDF resumes and other documents, then ask natural language questions about candidates. The system automatically classifies document types, extracts structured information, and protects against manipulation attempts embedded in documents.
