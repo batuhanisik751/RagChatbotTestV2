@@ -1,10 +1,10 @@
 # =============================================================================
 # MODEL CONFIGURATION
 # =============================================================================
-CHAT_MODEL = "gpt-4o-mini"
-ANSWER_MODEL = "gpt-4o"
-EXTRACTION_MODEL = "gpt-4o-mini"
-CLASSIFIER_MODEL = "gpt-4o-mini"
+CHAT_MODEL = "gpt-5.2"
+ANSWER_MODEL = "gpt-5.2"
+EXTRACTION_MODEL = "gpt-5.2"
+CLASSIFIER_MODEL = "gpt-5.2"
 
 # =============================================================================
 # FILE SIZE GUARDRAIL
