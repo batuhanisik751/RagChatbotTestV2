@@ -79,7 +79,7 @@ Respond with ONLY this JSON structure:
                     {"role": "user", "content": cls.CLASSIFIER_USER_PROMPT.format(document_text=excerpt)}
                 ],
                 temperature=0.1,  # Low temperature for consistent classification
-                max_tokens=300
+                max_completion_tokens=300
             )
             
             result_text = response.choices[0].message.content.strip()

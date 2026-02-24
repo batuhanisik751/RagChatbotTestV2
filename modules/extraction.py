@@ -25,7 +25,7 @@ def extract_work_history_guarded(text: str, client: OpenAI) -> List[Dict]:
                 )}
             ],
             temperature=0.1,
-            max_tokens=1500
+            max_completion_tokens=1500
         )
         result = response.choices[0].message.content.strip()
         if '```' in result:
@@ -56,7 +56,7 @@ def extract_non_resume_data_guarded(text: str, document_type: str, client: OpenA
                 )}
             ],
             temperature=0.1,
-            max_tokens=1000
+            max_completion_tokens=1000
         )
         result = response.choices[0].message.content.strip()
         if '```' in result:
@@ -80,7 +80,7 @@ def generate_metadata_guarded(text: str, filename: str, client: OpenAI) -> Dict:
                 {"role": "user", "content": f"Resume text:\n{text[:3000]}\n\nReturn:\nNAME: [full name]\nSUMMARY: [2-3 factual sentences about experience]"}
             ],
             temperature=0.2,
-            max_tokens=200
+            max_completion_tokens=200
         )
         name, summary = filename, ""
         for line in response.choices[0].message.content.split('\n'):

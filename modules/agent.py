@@ -134,7 +134,7 @@ def run_agent_loop(
                 tools=TOOL_DEFINITIONS,
                 tool_choice="auto",
                 temperature=0.3,
-                max_tokens=1024,
+                max_completion_tokens=1024,
             )
         except Exception as exc:
             logger.exception("Agent LLM call failed on round %d", round_idx)
@@ -206,7 +206,7 @@ def run_agent_loop(
             model=ANSWER_MODEL,
             messages=messages,
             temperature=0.3,
-            max_tokens=1024,
+            max_completion_tokens=1024,
         )
         answer = response.choices[0].message.content or ""
     except Exception as exc:

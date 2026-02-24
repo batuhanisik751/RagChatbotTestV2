@@ -95,7 +95,7 @@ def answer_as_persona(
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.3,
-            max_tokens=800,
+            max_completion_tokens=800,
         )
         return response.choices[0].message.content
     except Exception as e:
@@ -134,7 +134,7 @@ def generate_suggestions(
                 },
             ],
             temperature=0.7,
-            max_tokens=150,
+            max_completion_tokens=150,
         )
         suggestions = []
         for line in response.choices[0].message.content.split("\n"):
