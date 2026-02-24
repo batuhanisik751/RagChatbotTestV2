@@ -86,7 +86,7 @@ Risk scores are calculated per document and displayed in the UI:
 | Component | Technology |
 |-----------|------------|
 | **Frontend** | Streamlit |
-| **LLM** | OpenAI GPT-4o / GPT-4o-mini |
+| **LLM** | OpenAI GPT-5.2 |
 | **Vector DB** | FAISS (in-memory) |
 | **Embeddings** | SentenceTransformers (`all-MiniLM-L6-v2`) |
 | **PDF extraction** | pypdf |
@@ -98,10 +98,10 @@ Risk scores are calculated per document and displayed in the UI:
 
 | Role | Model | Used For |
 |------|-------|----------|
-| Classifier | `gpt-4o-mini` | Document type classification |
-| Extractor | `gpt-4o-mini` | Structured data extraction from documents |
-| Agent / Answerer | `gpt-4o` | Agent loop reasoning, tool calls, and final answers |
-| Chat | `gpt-4o-mini` | Follow-up question suggestions |
+| Classifier | `gpt-5.2` | Document type classification |
+| Extractor | `gpt-5.2` | Structured data extraction from documents |
+| Agent / Answerer | `gpt-5.2` | Agent loop reasoning, tool calls, and final answers |
+| Chat | `gpt-5.2` | Follow-up question suggestions |
 
 ---
 
@@ -236,10 +236,10 @@ RagChatbotTestV2/
 
 | Constant | Default | Purpose |
 |----------|---------|---------|
-| `CLASSIFIER_MODEL` | `gpt-4o-mini` | Document type classification |
-| `EXTRACTION_MODEL` | `gpt-4o-mini` | Structured data extraction |
-| `ANSWER_MODEL` | `gpt-4o` | Agent loop + answer generation |
-| `CHAT_MODEL` | `gpt-4o-mini` | Follow-up suggestions |
+| `CLASSIFIER_MODEL` | `gpt-5.2` | Document type classification |
+| `EXTRACTION_MODEL` | `gpt-5.2` | Structured data extraction |
+| `ANSWER_MODEL` | `gpt-5.2` | Agent loop + answer generation |
+| `CHAT_MODEL` | `gpt-5.2` | Follow-up suggestions |
 
 ### Limits
 
@@ -258,7 +258,7 @@ Recruiter message
        ▼
 ┌──────────────────────────────────────────────────────────┐
 │                      AGENT LOOP                          │
-│  Model: gpt-4o  ·  Up to 6 tool-call rounds             │
+│  Model: gpt-5.2  ·  Up to 6 tool-call rounds            │
 │                                                          │
 │  Inputs:                                                 │
 │    • System prompt (persona identity + document summaries│
@@ -309,13 +309,13 @@ PDF upload
 └────────┬─────────────────────────────────────┘
          ▼
 ┌──────────────────────────────────────────────┐
-│     CLASSIFICATION  (gpt-4o-mini)            │
+│     CLASSIFICATION  (gpt-5.2)                │
 │  Input: first 2 000 chars                    │
 │  Output: resume / non_resume + confidence    │
 └────────┬─────────────────────────────────────┘
          ▼
 ┌──────────────────────────────────────────────┐
-│  GUARDED EXTRACTION  (gpt-4o-mini)           │
+│  GUARDED EXTRACTION  (gpt-5.2)               │
 │  Resume → work history, education, skills    │
 │  Other  → entities, facts, summary           │
 └────────┬─────────────────────────────────────┘
