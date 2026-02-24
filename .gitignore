@@ -1,0 +1,4 @@
+.env
+persona.yaml
+venv/
+__pycache__/

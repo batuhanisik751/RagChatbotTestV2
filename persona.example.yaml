@@ -1,0 +1,26 @@
+# =============================================================================
+# PERSONA TEMPLATE (EXAMPLE)
+# =============================================================================
+# Copy this file to persona.yaml and fill in your own information.
+# =============================================================================
+
+name: ""
+role: ""
+location: ""
+
+# How the bot should sound when speaking as you
+tone: ""
+speaking_style: |
+  
+
+# A brief paragraph about yourself (supplements your documents)
+bio: |
+  
+
+# Optional contact / links (the agent can reference these when asked)
+contact:
+  email: ""
+  linkedin: ""
+  github: ""
+  website: ""
+
