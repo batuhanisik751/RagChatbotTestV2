@@ -85,7 +85,8 @@ Risk scores are calculated per document and displayed in the UI:
 
 | Component | Technology |
 |-----------|------------|
-| **Frontend** | Streamlit |
+| **Frontend** | React + TypeScript (Vite) |
+| **Backend API** | FastAPI |
 | **LLM** | OpenAI GPT-5.2 |
 | **Vector DB** | FAISS (in-memory) |
 | **Embeddings** | SentenceTransformers (`all-MiniLM-L6-v2`) |
@@ -149,11 +150,18 @@ Risk scores are calculated per document and displayed in the UI:
    ```
    Edit `persona.yaml` with your name, role, bio, tone, and contact links. The `github` and `linkedin` fields are used by the agent tools automatically.
 
-6. **Run the app**
+6. **Run the backend API**
    ```bash
-   streamlit run chatbot.py
+   uvicorn backend.app:app --reload
    ```
-   Open `http://localhost:8501` in your browser.
+
+7. **Run the frontend UI (new terminal)**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Open `http://localhost:5173` in your browser.
 
 ---
 
@@ -184,7 +192,10 @@ Risk scores are calculated per document and displayed in the UI:
 
 ```
 RagChatbotTestV2/
-├── chatbot.py                  # Main Streamlit app (UI, orchestration)
+├── chatbot.py                  # Deprecated stub (points to FastAPI + React UI)
+├── backend/
+│   └── app.py                  # FastAPI backend (sessions, uploads, chat endpoints)
+├── frontend/                   # TypeScript React UI (reference-based redesign)
 ├── persona.yaml                # Your persona config (git-ignored)
 ├── persona.example.yaml        # Template for persona.yaml
 ├── .env                        # API keys (git-ignored)
@@ -200,7 +211,7 @@ RagChatbotTestV2/
     ├── persona.py              # YAML persona loader + system prompt builder
     ├── prompts.py              # Guarded extraction & answer prompts
     ├── memory.py               # Short-term + user-facts memory layers
-    ├── session_state.py        # Streamlit session state defaults & reset
+    ├── session_state.py        # Legacy Streamlit session-state helpers (unused by new UI)
     ├── answers.py              # Persona answer generation + suggestion engine
     ├── document_processing.py  # Full document pipeline (extract → sanitize → classify → index)
     ├── text_processing.py      # Text cleaning, chunking, FAISS index building

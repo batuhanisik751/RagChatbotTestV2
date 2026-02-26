@@ -1,4 +1,6 @@
 .env
 persona.yaml
 venv/
+.venv/
 __pycache__/
+frontend/node_modules/
