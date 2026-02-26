@@ -323,35 +323,50 @@ def github_search(
                     "company": p.get("company", ""),
                 })
 
-            # Search repos scoped to user
-            search_q = f"{query} user:{username}"
-            repo_resp = requests.get(
-                f"{_GH_API}/search/repositories",
-                params={"q": search_q, "sort": "updated", "per_page": 5},
+            # Always fetch user's repo list so we can return names/descriptions
+            # (e.g. for "what's in your github" the search API returns nothing)
+            list_resp = requests.get(
+                f"{_GH_API}/users/{username}/repos",
+                params={"sort": "updated", "per_page": 50},
                 headers=_gh_headers(),
                 timeout=_TIMEOUT,
             )
-            if repo_resp.ok:
-                for repo in repo_resp.json().get("items", [])[:5]:
-                    results.append(_format_repo(repo))
-            elif repo_resp.status_code == 422:
-                # Fallback: list user repos and filter client-side
-                list_resp = requests.get(
-                    f"{_GH_API}/users/{username}/repos",
-                    params={"sort": "updated", "per_page": 30},
+            if list_resp.ok:
+                all_repos = list_resp.json()
+                # If query looks like a broad "list my repos" request, return all
+                q_lower = query.lower().strip()
+                broad_keywords = (
+                    "what", "repos", "repositories", "list", "show", "my github",
+                    "in your github", "on github", "have on github", "your repos",
+                )
+                is_broad = not q_lower or any(k in q_lower for k in broad_keywords)
+                if is_broad:
+                    for repo in all_repos[:50]:
+                        results.append(_format_repo(repo))
+                else:
+                    # Keyword search: filter by query
+                    for repo in all_repos:
+                        haystack = (
+                            f"{repo.get('name', '')} {repo.get('description', '') or ''} "
+                            f"{repo.get('language', '') or ''}".lower()
+                        )
+                        if q_lower in haystack or any(
+                            w in haystack for w in q_lower.split() if len(w) > 1
+                        ):
+                            results.append(_format_repo(repo))
+                    results = results[:20]  # cap keyword-matched repos
+            else:
+                # Fallback: search API (may return 0 for broad queries)
+                search_q = f"{query} user:{username}"
+                repo_resp = requests.get(
+                    f"{_GH_API}/search/repositories",
+                    params={"q": search_q, "sort": "updated", "per_page": 20},
                     headers=_gh_headers(),
                     timeout=_TIMEOUT,
                 )
-                if list_resp.ok:
-                    q_lower = query.lower()
-                    for repo in list_resp.json():
-                        haystack = (
-                            f"{repo.get('name', '')} {repo.get('description', '')} "
-                            f"{repo.get('language', '')}".lower()
-                        )
-                        if q_lower in haystack or any(w in haystack for w in q_lower.split()):
-                            results.append(_format_repo(repo))
-                    results = results[:5]
+                if repo_resp.ok:
+                    for repo in repo_resp.json().get("items", [])[:20]:
+                        results.append(_format_repo(repo))
         else:
             # General repo search
             repo_resp = requests.get(

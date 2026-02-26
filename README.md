@@ -4,19 +4,6 @@ A RAG-powered chatbot that **speaks as you** to recruiters. Upload your resume a
 
 ---
 
-## Screenshots
-
-### Home Screen
-![Home Screen](screenshots/Screenshot_1.png)
-
-### Resume Upload
-![Resume Upload](screenshots/Screenshot_2.png)
-
-### AI Response Example
-![AI Response Example](screenshots/Screenshot_3.png)
-
----
-
 ## Overview
 
 Traditional resume chatbots answer *about* candidates. This one answers *as* you.
@@ -154,6 +141,7 @@ Risk scores are calculated per document and displayed in the UI:
    ```bash
    uvicorn backend.app:app --reload
    ```
+   The API runs at `http://localhost:8000` by default.
 
 7. **Run the frontend UI (new terminal)**
    ```bash
@@ -161,7 +149,17 @@ Risk scores are calculated per document and displayed in the UI:
    npm install
    npm run dev
    ```
-   Open `http://localhost:5173` in your browser.
+   Open `http://localhost:5173` in your browser. The frontend talks to the backend via the API base URL (see frontend config if you use a different port).
+
+---
+
+## Workflow
+
+1. **Backend** (`uvicorn backend.app:app --reload`) and **frontend** (`cd frontend && npm run dev`) must both be running. Use `GET /api/health` to check backend status (persona loaded, API key present).
+2. **Bootstrap** — The UI calls `GET /api/bootstrap` (optionally with a `session_id`). The backend creates or reuses a session and returns config (persona, model names, tools, max file size) and state (phase, documents, chat history, alerts).
+3. **Upload & process** — User uploads PDFs and submits. The UI sends `POST /api/process` with `sessionId` and `files`. The backend validates files, runs the document pipeline (sanitize → classify → extract → chunk → FAISS index), and returns updated state. To add more documents after the first run, use `POST /api/add-documents`.
+4. **Chat** — Once documents are processed, the UI sends `POST /api/chat` with `sessionId` and `question`. The backend runs the agent loop (with short-term and user-facts memory), executes any tool calls, and returns the assistant message plus updated state (including suggested follow-up questions).
+5. **Reset** — `POST /api/reset` with `sessionId` clears the session (documents, chat, memory, vector DB) for a fresh start.
 
 ---
 
@@ -254,10 +252,10 @@ RagChatbotTestV2/
 
 ### Limits
 
-| Setting | Default |
-|---------|---------|
-| `MAX_FILE_SIZE_MB` | 2 |
-| `MAX_TOOL_ROUNDS` | 6 (agent loop cap) |
+| Setting | Default | Location |
+|---------|---------|----------|
+| `MAX_FILE_SIZE_MB` | 2 | `modules/config.py` |
+| `MAX_TOOL_ROUNDS` | 6 (agent loop cap) | `modules/agent.py` |
 
 ---
 
@@ -359,7 +357,7 @@ PDF upload
 
 ## Acknowledgments
 
-- [Streamlit](https://streamlit.io/) — web framework
+- [FastAPI](https://fastapi.tiangolo.com/) — backend API
 - [OpenAI](https://openai.com/) — language models
 - [FAISS](https://github.com/facebookresearch/faiss) — vector search
 - [SentenceTransformers](https://www.sbert.net/) — embeddings
